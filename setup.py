@@ -27,7 +27,7 @@ setup(
     description="Python Boilerplate contains all the boilerplate you need to create a Python package.",
     entry_points={
         'console_scripts': [
-            'InteractiveHtmlBom=InteractiveHtmlBom.generate_interactive_bom:main',
+            'generate_interactive_bom.py=InteractiveHtmlBom.generate_interactive_bom:main',
         ],
     },
     install_requires=requirements,
