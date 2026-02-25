@@ -258,7 +258,10 @@ attribute.
   // 0: justify center
   // 1: justify right/bot
   "justify": [horizontal, vertical],
+  // Either the thickness or the fillrule must be used
   "thickness": thickness,
+  // fillrule is only supported for svgpath
+  "fillrule": "nonzero" | "evenodd",
   "attr": [
     // may include none, one or both
     "italic", "mirrored"

@@ -4,6 +4,7 @@ from __future__ import absolute_import
 import argparse
 import os
 import sys
+
 # Add ../ to the path
 # Works if this script is executed without installing the module
 try:
@@ -26,16 +27,22 @@ def to_utf(s):
 
 
 def main():
-    create_wx_app = 'INTERACTIVE_HTML_BOM_NO_DISPLAY' not in os.environ
+    from .compat import get_wx, should_create_wx_app
+    wx = get_wx()
+    create_wx_app = should_create_wx_app()
 
-    import wx
+    if wx is None and create_wx_app:
+        print("wxpython is required unless INTERACTIVE_HTML_BOM_NO_DISPLAY "
+              "environment variable is set")
+        sys.exit(1)
 
-    if create_wx_app:
-        app = wx.App()
-        if hasattr(wx, "APP_ASSERT_SUPPRESS"):
-            app.SetAssertMode(wx.APP_ASSERT_SUPPRESS)
-    elif hasattr(wx, "DisableAsserts"):
-        wx.DisableAsserts()
+    if wx is not None:
+        if create_wx_app:
+            app = wx.App()
+            if hasattr(wx, "APP_ASSERT_SUPPRESS"):
+                app.SetAssertMode(wx.APP_ASSERT_SUPPRESS)
+        elif hasattr(wx, "DisableAsserts"):
+            wx.DisableAsserts()
 
     try:
         from .core import ibom
@@ -49,6 +56,7 @@ def main():
         from InteractiveHtmlBom.ecad import get_parser_by_extension
         from InteractiveHtmlBom.version import version
         from InteractiveHtmlBom.errors import (ExitCodes, ParsingException, exit_error)
+
 
     parser = argparse.ArgumentParser(
             description='KiCad InteractiveHtmlBom plugin CLI.',
